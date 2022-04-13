@@ -1,11 +1,22 @@
 package com.techelevator.items;
 
+import com.techelevator.ProductChoices;
+
 public class Drink_Item implements Item
 {
     private String name = "";
     private String slot = "";
     private double price = 0.00;
     private int inventory = 0;
+
+    // Constructor
+    public Drink_Item(String slot, String name, double price)
+    {
+        this.name = name;
+        this.slot = slot;
+        this.price = price;
+        this.inventory = ProductChoices.DEFAULT_STARTING_INVENTORY;
+    }
 
     //region GETTERS
     @Override
