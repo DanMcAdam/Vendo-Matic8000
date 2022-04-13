@@ -2,7 +2,11 @@ package com.techelevator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
 
 import com.techelevator.items.*;
 
@@ -25,7 +29,15 @@ public class ProductChoices
     //GETTER
     public Map<String, Item> getProductChoices() {return productChoices;}
 
-    public void populateItemMap() throws FileNotFoundException  //Never throws for some reason (which isn't a bad thing)
+
+//    public File[]finder(String dirName)
+//    {
+//        File dir = new File(dirName);
+//        return dir.listFiles(new FilenameFilter(){public boolean accept(File dir,String filename)
+//        {return filename.endsWith(".csv");}});
+//    }
+
+    public void populateItemMap() throws FileNotFoundException
     {
         File inventory = new File(System.getProperty("user.dir")+"/vendingmachine.csv");
         try(Scanner fileScanner = new Scanner(inventory))
