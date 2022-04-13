@@ -2,12 +2,15 @@ package com.techelevator;
 
 import com.techelevator.view.Menu;
 import java.io.FileNotFoundException;
+import java.text.NumberFormat;
 
 
 public class VendingMachineCLI
 {
 	private Menu menu;
 	static ProductChoices productChoices;
+	CurrentMoney currentMoney = new CurrentMoney();
+	NumberFormat formatter = NumberFormat.getCurrencyInstance();  //format currency
 
 	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
 	private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
@@ -15,6 +18,13 @@ public class VendingMachineCLI
 	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_DISPLAY_ITEMS,
 														MAIN_MENU_OPTION_PURCHASE,
 														MAIN_MENU_OPTION_EXIT };
+
+	private static final String PURCHASE_MENU_FEED_MONEY = "Feed Money";
+	private static final String PURCHASE_MENU_SELECT_PRODUCT = "Select Product";
+	private static final String PURCHASE_MENU_FINISH_TRANSACTION = "Finish Transaction";
+	private static final String[] PURCHASE_MENU_OPTIONS = {PURCHASE_MENU_FEED_MONEY,
+														   PURCHASE_MENU_SELECT_PRODUCT,
+														   PURCHASE_MENU_FINISH_TRANSACTION};
 
 
 	public VendingMachineCLI(Menu menu) throws FileNotFoundException
@@ -38,7 +48,7 @@ public class VendingMachineCLI
 			/*PURCHASE OPTION*/
 			else if (choice.equals(MAIN_MENU_OPTION_PURCHASE))
 			{
-				// do purchase
+				purchaseItems();
 			}
 
 			/*EXIT OPTION*/
@@ -68,6 +78,14 @@ public class VendingMachineCLI
 			}
 		}
 	}
+
+	public void purchaseItems()
+	{
+		System.out.println("Current Money Provided: " + formatter.format(currentMoney.getCurrentMoney()));
+		String purchaseChoice = (String)menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
+	}
+
+
 
 	public static void main(String[] args) throws FileNotFoundException
 	{
