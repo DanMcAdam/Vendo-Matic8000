@@ -1,6 +1,7 @@
 package com.techelevator.view;
 
 import com.techelevator.ProductChoices;
+import com.techelevator.VendingMachineCLI;
 import com.techelevator.items.Item;
 
 import java.io.InputStream;
@@ -28,7 +29,7 @@ public class Menu {
 		}
 		else
 		{
-			System.out.println("That is not a valid input");
+			VendingMachineCLI.display.sendToDisplay("That is not a valid input");
 			return null;
 		}
 	}

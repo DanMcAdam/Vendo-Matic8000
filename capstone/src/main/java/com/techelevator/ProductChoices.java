@@ -32,6 +32,8 @@ public class ProductChoices
     public void populateItemMap() throws FileNotFoundException
     {
         File inventory = new File(System.getProperty("user.dir")+"/capstone/vendingmachine.csv");
+        //fix for test TO-DO THIS IS HACKY AS HECK
+        //File inventory = new File(System.getProperty("user.dir")+"/vendingmachine.csv");
         try(Scanner fileScanner = new Scanner(inventory))
         {
             while(fileScanner.hasNextLine())

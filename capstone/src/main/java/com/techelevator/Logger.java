@@ -1,6 +1,7 @@
 package com.techelevator;
 
 import java.io.*;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -9,11 +10,15 @@ public class Logger
     private static PrintWriter logWriter;
     private static final File log = new File(System.getProperty("user.dir")+"/capstone/Log.txt");
 
+    //private static final File salesReport = new File(System.getProperty("user.dir")+"/capstone/"+ timeStamp +"_salesreport.txt");
+    private static NumberFormat currency = NumberFormat.getCurrencyInstance();  //format currency
+
 
     public static void log(String message)
     {
         DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("d/MM/uuuu HH:mm:ss a ");
         String timeStamp = LocalDateTime.now().format(dateTimeFormat);
+
 
         try
         {
@@ -36,5 +41,55 @@ public class Logger
             }
         }
         else logWriter.println(">" + timeStamp + message + "\n");
+    }
+
+    public static File generateSalesReport (ProductChoices productChoices )
+    {
+        DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("d-MMM-uuuu HH-mma");
+        String timeStamp = LocalDateTime.now().format(dateTimeFormat);
+        File salesReport = new File(System.getProperty("user.dir")+"/capstone/"+ timeStamp +"_salesreport.txt");
+        try
+        {
+            if(salesReport.createNewFile());
+        }
+        catch (IOException error)
+        {
+            System.err.println("SalesReport file could not be created");
+        }
+
+        if (logWriter == null)
+        {
+            try (PrintWriter reportWriter = new PrintWriter (new FileOutputStream(salesReport)))
+            {
+                double totalSales = 0.00;
+                for (String f : productChoices.getProductChoices().keySet())
+                {
+                    String productName = productChoices.getProductChoices().get(f).getName() + "|";
+                    int productInventory = ProductChoices.DEFAULT_STARTING_INVENTORY - productChoices.getProductChoices().get(f).getInventory();
+                    totalSales+= productInventory*productChoices.getProductChoices().get(f).getPrice();
+                    reportWriter.println(productName + productInventory);
+                }
+                reportWriter.println("\n####################################");
+                reportWriter.println("        TOTAL SALES: "+currency.format(totalSales));
+                reportWriter.println("####################################\n");
+                reportWriter.flush();
+                return salesReport;
+            }
+            catch (FileNotFoundException error)
+            {
+                System.err.println("SalesReport file could not be found");
+            }
+        }
+        else
+        {
+            for (String f : productChoices.getProductChoices().keySet())
+            {
+                String productName = productChoices.getProductChoices().get(f).getName() + "|";
+                int productInventory = productChoices.getProductChoices().get(f).getInventory();
+                logWriter.println(productName + productInventory);
+            }
+            return salesReport;
+        }
+        return salesReport;
     }
 }
