@@ -29,6 +29,17 @@ public class Candy_Item implements Item
     public int getInventory() {return inventory;}
     //endregion
 
+    @Override
+    public String dispenseItem()
+    {
+        if (inventory != 0)
+        {
+            inventory--;
+            return "Munch Munch, Yum!";
+        }
+        else return "Item is currently sold out";
+    }
+
     //region SETTERS
     public void setName(String name) {this.name = name;}
 

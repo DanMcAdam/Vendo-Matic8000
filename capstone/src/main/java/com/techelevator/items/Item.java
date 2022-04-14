@@ -6,4 +6,5 @@ public interface Item
     double  getPrice();
     String getSlot();
     int getInventory();
+    String dispenseItem();
 }

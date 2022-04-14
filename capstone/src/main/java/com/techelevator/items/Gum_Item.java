@@ -29,6 +29,17 @@ public class Gum_Item implements Item
     public String getSlot() {return slot;}
     @Override
     public int getInventory() {return inventory;}
+
+    @Override
+    public String dispenseItem()
+    {
+        if (inventory != 0)
+        {
+            inventory--;
+            return "Chew Chew, Yum!";
+        }
+        else return "Item is currently sold out";
+    }
     //endregion
 
     //region SETTERS

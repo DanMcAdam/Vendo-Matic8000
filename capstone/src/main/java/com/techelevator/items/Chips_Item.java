@@ -27,7 +27,20 @@ public class Chips_Item implements Item
     public String getSlot() {return slot;}
     @Override
     public int getInventory() {return inventory;}
+
     //endregion
+
+
+    @Override
+    public String dispenseItem()
+    {
+        if (inventory != 0)
+        {
+            inventory--;
+            return "Crunch Crunch, Yum!";
+        }
+        else return "Item is currently sold out";
+    }
 
     //region SETTERS
     public void setName(String name) {this.name = name;}

@@ -1,5 +1,8 @@
 package com.techelevator.view;
 
+import com.techelevator.ProductChoices;
+import com.techelevator.items.Item;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -16,11 +19,36 @@ public class Menu {
 		this.in = new Scanner(input);
 	}
 
+	public Item getChoiceFromProductChoiceMap(ProductChoices productChoicesObject)
+	{
+		String userInput = in.nextLine();
+		if (productChoicesObject.getProductChoices().containsKey(userInput))
+		{
+			Item chosenItem = productChoicesObject.getProductChoices().get(userInput);
+			return chosenItem;
+		}
+		else
+		{
+			System.out.println("That is not a valid input");
+			return null;
+		}
+	}
+
 	public Object getChoiceFromOptions(Object[] options)
 	{
 		Object choice = null;
 		while (choice == null) {
 			displayMenuOptions(options);
+			choice = getChoiceFromUserInput(options);
+		}
+		return choice;
+	}
+
+	public Object getChoiceFromOptions(Object[] options, String addedText)
+	{
+		Object choice = null;
+		while (choice == null) {
+			displayMenuOptions(options, addedText);
 			choice = getChoiceFromUserInput(options);
 		}
 		return choice;
@@ -52,11 +80,24 @@ public class Menu {
 	private void displayMenuOptions(Object[] options)
 	{
 		out.println();
+		for (int i = 0; i < options.length - 1; i++)
+		{
+			int optionNum = i + 1;
+			out.println(optionNum + ") " + options[i]);
+		}
+		out.print(System.lineSeparator() + "Please choose an option >>> ");
+		out.flush();
+	}
+
+	private void displayMenuOptions(Object[] options, String addedText)
+	{
+		out.println();
 		for (int i = 0; i < options.length; i++)
 		{
 			int optionNum = i + 1;
 			out.println(optionNum + ") " + options[i]);
 		}
+		out.println(addedText);
 		out.print(System.lineSeparator() + "Please choose an option >>> ");
 		out.flush();
 	}
