@@ -18,8 +18,8 @@ public class Logger
         String dateTime = LocalDateTime.now().format(formatter);
         try
         {
-            if (log.createNewFile()) System.out.println("file created!");
-            else System.out.println("file exists!");
+            if (log.createNewFile());
+            //else System.out.println("file exists!");
         }
         catch (IOException error)
         {
