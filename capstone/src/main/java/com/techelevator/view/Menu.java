@@ -21,7 +21,7 @@ public class Menu {
 
 	public Item getChoiceFromProductChoiceMap(ProductChoices productChoicesObject)
 	{
-		String userInput = in.nextLine();
+		String userInput = in.nextLine().toUpperCase();
 		if (productChoicesObject.getProductChoices().containsKey(userInput))
 		{
 			Item chosenItem = productChoicesObject.getProductChoices().get(userInput);
@@ -44,11 +44,21 @@ public class Menu {
 		return choice;
 	}
 
-	public Object getChoiceFromOptions(Object[] options, String addedText)
+//	public Object getChoiceFromOptions(Object[] options, String addedText)
+//	{
+//		Object choice = null;
+//		while (choice == null) {
+//			displayMenuOptions(options, addedText);
+//			choice = getChoiceFromUserInput(options);
+//		}
+//		return choice;
+//	}
+
+	public Object getChoiceFromPurchaseOptions(Object[] options, String currentAmountMessage)
 	{
 		Object choice = null;
 		while (choice == null) {
-			displayMenuOptions(options, addedText);
+			displayPurchaseOptions(options, currentAmountMessage);
 			choice = getChoiceFromUserInput(options);
 		}
 		return choice;
@@ -80,7 +90,7 @@ public class Menu {
 	private void displayMenuOptions(Object[] options)
 	{
 		out.println();
-		for (int i = 0; i < options.length - 1; i++)
+		for (int i = 0; i < options.length-1; i++)
 		{
 			int optionNum = i + 1;
 			out.println(optionNum + ") " + options[i]);
@@ -89,7 +99,20 @@ public class Menu {
 		out.flush();
 	}
 
-	private void displayMenuOptions(Object[] options, String addedText)
+//	private void displayMenuOptions(Object[] options, String addedText)
+//	{
+//		out.println();
+//		for (int i = 0; i < options.length; i++)
+//		{
+//			int optionNum = i + 1;
+//			out.println(optionNum + ") " + options[i]);
+//		}
+//		out.println(addedText);
+//		out.print(System.lineSeparator() + "Please choose an option >>> ");
+//		out.flush();
+//	}
+
+	private void displayPurchaseOptions(Object[] options, String currentAmountMessage)
 	{
 		out.println();
 		for (int i = 0; i < options.length; i++)
@@ -97,7 +120,7 @@ public class Menu {
 			int optionNum = i + 1;
 			out.println(optionNum + ") " + options[i]);
 		}
-		out.println(addedText);
+		out.println(currentAmountMessage);
 		out.print(System.lineSeparator() + "Please choose an option >>> ");
 		out.flush();
 	}
