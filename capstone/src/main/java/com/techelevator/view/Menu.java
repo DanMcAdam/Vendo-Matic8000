@@ -10,8 +10,8 @@ import java.util.Scanner;
 
 public class Menu {
 
-	private PrintWriter out;
-	private Scanner in;
+	private final PrintWriter out;
+	private final Scanner in;
 
 	public Menu(InputStream input, OutputStream output)
 	{
@@ -24,8 +24,7 @@ public class Menu {
 		String userInput = in.nextLine().toUpperCase();
 		if (productChoicesObject.getProductChoices().containsKey(userInput))
 		{
-			Item chosenItem = productChoicesObject.getProductChoices().get(userInput);
-			return chosenItem;
+			return productChoicesObject.getProductChoices().get(userInput);
 		}
 		else
 		{
@@ -44,16 +43,6 @@ public class Menu {
 		return choice;
 	}
 
-//	public Object getChoiceFromOptions(Object[] options, String addedText)
-//	{
-//		Object choice = null;
-//		while (choice == null) {
-//			displayMenuOptions(options, addedText);
-//			choice = getChoiceFromUserInput(options);
-//		}
-//		return choice;
-//	}
-
 	public Object getChoiceFromPurchaseOptions(Object[] options, String currentAmountMessage)
 	{
 		Object choice = null;
@@ -70,7 +59,7 @@ public class Menu {
 		String userInput = in.nextLine();
 		try
 		{
-			int selectedOption = Integer.valueOf(userInput);
+			int selectedOption = Integer.parseInt(userInput);
 			if (selectedOption > 0 && selectedOption <= options.length)
 			{
 				choice = options[selectedOption - 1];
@@ -98,19 +87,6 @@ public class Menu {
 		out.print(System.lineSeparator() + "Please choose an option >>> ");
 		out.flush();
 	}
-
-//	private void displayMenuOptions(Object[] options, String addedText)
-//	{
-//		out.println();
-//		for (int i = 0; i < options.length; i++)
-//		{
-//			int optionNum = i + 1;
-//			out.println(optionNum + ") " + options[i]);
-//		}
-//		out.println(addedText);
-//		out.print(System.lineSeparator() + "Please choose an option >>> ");
-//		out.flush();
-//	}
 
 	private void displayPurchaseOptions(Object[] options, String currentAmountMessage)
 	{

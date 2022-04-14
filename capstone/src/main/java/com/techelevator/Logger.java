@@ -7,18 +7,17 @@ import java.time.format.DateTimeFormatter;
 public class Logger
 {
     private static PrintWriter logWriter;
-    private static File log = new File("Log.txt");
+    private static final File log = new File(System.getProperty("user.dir")+"/capstone/Log.txt");
 
 
     public static void log(String message)
     {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/uuuu HH:mm:ss a ");
-        String dateTime = LocalDateTime.now().format(formatter);
+        DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("d/MM/uuuu HH:mm:ss a ");
+        String timeStamp = LocalDateTime.now().format(dateTimeFormat);
 
         try
         {
-            if (log.createNewFile());
-            //else System.out.println("file exists!");
+            if(log.createNewFile());
         }
         catch (IOException error)
         {
@@ -29,13 +28,13 @@ public class Logger
         {
             try (PrintWriter logWriter = new PrintWriter (new FileOutputStream(log, true)))
             {
-                logWriter.println(">" + dateTime + message + "\n");
+                logWriter.println(">" + timeStamp + message + "\n");
             }
             catch (FileNotFoundException error)
             {
                 System.err.println("Log file could not be found");
             }
         }
-        else logWriter.println(">" + dateTime + message + "\n");
+        else logWriter.println(">" + timeStamp + message + "\n");
     }
 }

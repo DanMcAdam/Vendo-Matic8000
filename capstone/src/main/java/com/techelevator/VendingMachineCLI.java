@@ -3,18 +3,25 @@ package com.techelevator;
 import com.techelevator.items.Item;
 import com.techelevator.view.Menu;
 
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.text.NumberFormat;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 
 public class VendingMachineCLI
 {
-    private Menu menu;
+    private final Menu menu;
     static ProductChoices productChoices;
     static CurrentMoney currentMoney;
+    private static PrintWriter reportWriter;
+
     NumberFormat currency = NumberFormat.getCurrencyInstance();  //format currency
+    DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("d-MMM-uuuu HH-mma");
+    String timeStamp = LocalDateTime.now().format(dateTimeFormat);
+
+    private final File salesReport = new File(System.getProperty("user.dir")+"/capstone/"+ timeStamp +"_salesreport.txt");
 
     //region Menu Strings
     private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
@@ -44,7 +51,6 @@ public class VendingMachineCLI
                                                                       FEED_MONEY_FIVE_DOLLAR,
                                                                       FEED_MONEY_TEN_DOLLAR};
 
-    //private static final double[] COIN_VALUES = {25, 10, 5};
     //endregion
 
 
@@ -81,34 +87,22 @@ public class VendingMachineCLI
                 /*HIDDEN SALES REPORT MENU*/
                 case MAIN_MENU_OPTION_SALESREPORT:
                     //implement sales report
-                    System.out.println("HIDDEN MENU ACCESSED!");
-                    break;
+                    generateSalesReport();
+                    try(Scanner fileScanner = new Scanner(salesReport))
+                    {
+                        System.out.println("\n####################################");
+                        System.out.println("SALES REPORT FOR "+ timeStamp);
+                        System.out.println("####################################\n");
+                        while (fileScanner.hasNextLine()) {
+                            String line = fileScanner.nextLine();
+                            System.out.println(line);
+                        }
+                    }
+                    catch(FileNotFoundException e)
+                        {
+                            System.err.println(e.getMessage());
+                        }
             }
-//            /* DISPLAY ITEMS*/
-//            if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS))
-//            {
-//                displayItems();
-//            }
-//
-//            /*PURCHASE OPTION*/
-//            else if (choice.equals(MAIN_MENU_OPTION_PURCHASE))
-//            {
-//                purchaseItems();
-//            }
-//
-//            /*EXIT OPTION*/
-//            else if (choice.equals(MAIN_MENU_OPTION_EXIT))
-//            {
-//                System.out.println("Goodbye!");
-//                System.exit(0);
-//            }
-//
-//            /*HIDDEN SALES REPORT MENU*/
-//            else if (choice.equals(MAIN_MENU_OPTION_SALESREPORT))
-//            {
-//                //implement sales report
-//                System.out.println("HIDDEN MENU ACCESSED!");
-//            }
         }
     }
 
@@ -157,15 +151,18 @@ public class VendingMachineCLI
                 //endregion
                 purchaseItems();
                 break;
+
             case PURCHASE_MENU_SELECT_PRODUCT:
                 displayItems();
                 processPurchase(menu.getChoiceFromProductChoiceMap(productChoices));
                 break;
+
             case PURCHASE_MENU_FINISH_TRANSACTION:
-                System.out.println("Your Change is " + currentMoney.calculateChange(currentMoney.getCurrentMoney()));
+                System.out.println("Your Change is " + CurrentMoney.calculateChange(currentMoney.getCurrentMoney()));
+                processTransaction("GIVE CHANGE: ", false, currentMoney.getCurrentMoney());
                 break;
         }
-        processTransaction("GIVE CHANGE: ", false, currentMoney.getCurrentMoney());
+//        processTransaction("GIVE CHANGE: ", false, currentMoney.getCurrentMoney());
     }
 
 
@@ -174,17 +171,14 @@ public class VendingMachineCLI
     {
         if (chosenItem != null)
         {
-//            if (currentMoney.checkIfSufficientFunds(chosenItem.getPrice()))
             if(currentMoney.getCurrentMoney()>=chosenItem.getPrice())
             {
-//                if (chosenItem.getInventory() >= 1)
                 if(chosenItem.getInventory()>0)
                 {
                     processTransaction("DISPENSED: "+chosenItem.getName() + " " + chosenItem.getSlot() + " ", false, chosenItem.getPrice());
                     System.out.println("Dispensed " + chosenItem.getName() + ", for " + currency.format(chosenItem.getPrice()) + "!\nYou have " + currency.format(currentMoney.getCurrentMoney()) + " remaining on your balance\n");
                     System.out.println(chosenItem.dispenseItem());
                 }
-                //else chosenItem.dispenseItem();
                 else System.out.println("That item is SOLD OUT");
             }
             else System.out.println("Insufficient funds");
@@ -203,6 +197,50 @@ public class VendingMachineCLI
             currentMoney.subtractMoney(transactionAmount);
         }
         Logger.log(transaction + currency.format(transactionAmount) + " " + "REMAINING IN MACHINE: "+ currency.format(currentMoney.getCurrentMoney()));
+    }
+
+    private void generateSalesReport ()
+    {
+        try
+        {
+            if(salesReport.createNewFile());
+        }
+        catch (IOException error)
+        {
+            System.err.println("SalesReport file could not be created");
+        }
+
+        if (reportWriter == null)
+        {
+            try (PrintWriter reportWriter = new PrintWriter (new FileOutputStream(salesReport)))
+            {
+                double totalSales = 0.00;
+                for (String f : productChoices.getProductChoices().keySet())
+                {
+                    String productName = productChoices.getProductChoices().get(f).getName() + "|";
+                    int productInventory = ProductChoices.DEFAULT_STARTING_INVENTORY - productChoices.getProductChoices().get(f).getInventory();
+                    totalSales+= productInventory*productChoices.getProductChoices().get(f).getPrice();
+                    reportWriter.println(productName + productInventory);
+                }
+                reportWriter.println("\n####################################");
+                reportWriter.println("        TOTAL SALES: "+currency.format(totalSales));
+                reportWriter.println("####################################\n");
+                reportWriter.flush();
+            }
+            catch (FileNotFoundException error)
+            {
+                System.err.println("SalesReport file could not be found");
+            }
+        }
+        else
+        {
+            for (String f : productChoices.getProductChoices().keySet())
+            {
+                String productName = productChoices.getProductChoices().get(f).getName() + "|";
+                int productInventory = productChoices.getProductChoices().get(f).getInventory();
+                reportWriter.println(productName + productInventory);
+            }
+        }
     }
 
     public static void main(String[] args) throws FileNotFoundException

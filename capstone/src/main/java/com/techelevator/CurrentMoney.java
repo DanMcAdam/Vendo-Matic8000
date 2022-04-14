@@ -25,18 +25,6 @@ public class CurrentMoney
         }
     }
 
-//    public boolean checkIfSufficientFunds (double checkAmount)
-//    {
-//        if (checkAmount <= currentMoney)
-//        {
-//            return true;
-//        }
-//        else
-//        {
-//            return false;
-//        }
-//    }
-
     public static Map calculateChange(double currentMoney)
     {
         Map<String, Integer> change = new HashMap();
