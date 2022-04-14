@@ -29,17 +29,9 @@ public class ProductChoices
     //GETTER
     public Map<String, Item> getProductChoices() {return productChoices;}
 
-
-//    public File[]finder(String dirName)
-//    {
-//        File dir = new File(dirName);
-//        return dir.listFiles(new FilenameFilter(){public boolean accept(File dir,String filename)
-//        {return filename.endsWith(".csv");}});
-//    }
-
     public void populateItemMap() throws FileNotFoundException
     {
-        File inventory = new File(System.getProperty("user.dir")+"/vendingmachine.csv");
+        File inventory = new File(System.getProperty("user.dir")+"/capstone/vendingmachine.csv");
         try(Scanner fileScanner = new Scanner(inventory))
         {
             while(fileScanner.hasNextLine())

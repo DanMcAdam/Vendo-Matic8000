@@ -3,13 +3,14 @@ package com.techelevator;
 import com.techelevator.view.Menu;
 import java.io.FileNotFoundException;
 import java.text.NumberFormat;
+import java.util.Scanner;
 
 
 public class VendingMachineCLI
 {
 	private Menu menu;
 	static ProductChoices productChoices;
-	CurrentMoney currentMoney = new CurrentMoney();
+	static CurrentMoney currentMoney;
 	NumberFormat formatter = NumberFormat.getCurrencyInstance();  //format currency
 
 	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
@@ -31,6 +32,7 @@ public class VendingMachineCLI
 	{
 		this.menu = menu;
 		productChoices = new ProductChoices();
+		currentMoney = new CurrentMoney();
 	}
 
 	public void run()
@@ -81,9 +83,32 @@ public class VendingMachineCLI
 
 	public void purchaseItems()
 	{
-		System.out.println("Current Money Provided: " + formatter.format(currentMoney.getCurrentMoney()));
 		String purchaseChoice = (String)menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
+		System.out.println("Current Money Provided: " + formatter.format(currentMoney.getCurrentMoney()));
+		Scanner sc = new Scanner(System.in);
+
+		if (purchaseChoice.equals(PURCHASE_MENU_FEED_MONEY))
+		{
+			System.out.println("How much in whole dollar amount would you like to add?");
+			currentMoney.addMoney(sc.nextDouble());
+			System.out.println("Would you like to add more (Y/N)?\n");
+			if (!sc.nextLine().equalsIgnoreCase("n"))
+			{
+
+			}
+			purchaseItems();
+		}
+		else if (purchaseChoice.equals(PURCHASE_MENU_SELECT_PRODUCT))
+		{
+			//select product
+		}
+		else if (purchaseChoice.equals(PURCHASE_MENU_FINISH_TRANSACTION))
+		{
+			//complete transaction
+		}
 	}
+
+
 
 
 

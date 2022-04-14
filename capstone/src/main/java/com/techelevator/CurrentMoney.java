@@ -8,4 +8,8 @@ public class CurrentMoney
     public double getCurrentMoney() {return currentMoney;}
     //endregion
 
+    public void addMoney(double addAmount)
+    {
+        this.currentMoney += addAmount;
+    }
 }
