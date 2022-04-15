@@ -8,9 +8,8 @@ import java.time.format.DateTimeFormatter;
 public class Logger
 {
     private static PrintWriter logWriter;
-    private static final File log = new File(System.getProperty("user.dir")+"/capstone/Log.txt");
+    private static final File tempDIR = new File(System.getProperty("user.dir")+"\\capstone\\logs\\");
 
-    //private static final File salesReport = new File(System.getProperty("user.dir")+"/capstone/"+ timeStamp +"_salesreport.txt");
     private static NumberFormat currency = NumberFormat.getCurrencyInstance();  //format currency
 
 
@@ -19,6 +18,11 @@ public class Logger
         DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("d/MM/uuuu HH:mm:ss a ");
         String timeStamp = LocalDateTime.now().format(dateTimeFormat);
 
+        if(!tempDIR.exists())
+        {
+            tempDIR.mkdir();
+        }
+        File log = new File(tempDIR+"/Log.txt");
 
         try
         {

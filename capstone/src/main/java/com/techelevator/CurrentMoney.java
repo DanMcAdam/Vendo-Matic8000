@@ -14,14 +14,14 @@ public class CurrentMoney
 
     public void addMoney(double addAmount)
     {
-        this.currentMoney += addAmount;
+        this.currentMoney += Math.abs(addAmount);
     }
 
     public void subtractMoney (double subtractAmount)
     {
         if (subtractAmount <= currentMoney)
         {
-            currentMoney-=subtractAmount;
+            currentMoney-=Math.abs(subtractAmount);
         }
     }
 

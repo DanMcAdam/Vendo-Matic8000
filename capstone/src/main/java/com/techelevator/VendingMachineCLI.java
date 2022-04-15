@@ -24,11 +24,11 @@ public class VendingMachineCLI
 
 
 
-    //region Menu Strings
+    //region Menu String Arrays
     private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
     private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
     private static final String MAIN_MENU_OPTION_EXIT = "Exit";
-    private static final String MAIN_MENU_OPTION_SALESREPORT   = "Sales Report";
+    private static final String MAIN_MENU_OPTION_SALESREPORT   = "";
     private static final String[] MAIN_MENU_OPTIONS = {MAIN_MENU_OPTION_DISPLAY_ITEMS,
                                                        MAIN_MENU_OPTION_PURCHASE,
                                                        MAIN_MENU_OPTION_EXIT,
@@ -47,27 +47,25 @@ public class VendingMachineCLI
     private static final String FEED_MONEY_TWO_DOLLAR = "Add $2";
     private static final String FEED_MONEY_FIVE_DOLLAR = "Add $5";
     private static final String FEED_MONEY_TEN_DOLLAR = "Add $10";
-    //TEST NEEDS PUBLIC, TODO MAKE DIFFERENT
-    public static final String[] PURCHASE_MENU_FEED_MONEY_OPTIONS = {FEED_MONEY_ONE_DOLLAR,
+    private static final String[] PURCHASE_MENU_FEED_MONEY_OPTIONS = {FEED_MONEY_ONE_DOLLAR,
                                                                       FEED_MONEY_TWO_DOLLAR,
                                                                       FEED_MONEY_FIVE_DOLLAR,
                                                                       FEED_MONEY_TEN_DOLLAR};
 
     //endregion
 
+    public static void main(String[] args) throws FileNotFoundException
+    {
+        Menu menu = new Menu(System.in, System.out);
+        VendingMachineCLI cli = new VendingMachineCLI(menu);
+        cli.run();
+    }
 
     public VendingMachineCLI(Menu menu) throws FileNotFoundException
     {
+        jetbrains://idea/navigate/reference?project=module-1-capstone&path=com/techelevator/placeholder.txt
         this.menu = menu;
-        productChoices = new ProductChoices();
-        currentMoney = new CurrentMoney();
-        display = new Display();
-    }
-
-    public VendingMachineCLI() throws FileNotFoundException
-    {
-        this.menu = new Menu(System.in, System.out);
-        productChoices = new ProductChoices();
+        productChoices = new ProductChoices(new File(System.getProperty("user.dir")+"/capstone/vendingmachine.csv"));
         currentMoney = new CurrentMoney();
         display = new Display();
     }
@@ -137,7 +135,8 @@ public class VendingMachineCLI
 
     public void purchaseItems()
     {
-        String purchaseChoice = (String) menu.getChoiceFromPurchaseOptions(PURCHASE_MENU_OPTIONS, "\nCurrent Money Provided: " + currency.format(currentMoney.getCurrentMoney()));
+        String purchaseChoice = (String) menu.getChoiceFromPurchaseOptions(PURCHASE_MENU_OPTIONS,
+                "\nCurrent Money Provided: " + currency.format(currentMoney.getCurrentMoney()));
 
         switch (purchaseChoice) {
             case PURCHASE_MENU_FEED_MONEY:
@@ -161,10 +160,9 @@ public class VendingMachineCLI
         }
     }
 
-    //should be private, public due to testing
-    public void feedMoney(String feedChoice)
+    private void feedMoney(String feedChoice)
     {
-        System.out.println("fed money");
+        // Takes incoming string, chosen by user from menu from array, to add money into machine in whole bill amounts
         switch (feedChoice) {
             case FEED_MONEY_ONE_DOLLAR:
                 processTransaction("FEED MONEY: ", true, 1);
@@ -204,7 +202,6 @@ public class VendingMachineCLI
 
     private void processTransaction (String transaction, boolean isDeposit, double transactionAmount)
     {
-        System.out.println("fire transaction process");
         if (isDeposit)
         {
             currentMoney.addMoney(transactionAmount);
@@ -216,16 +213,4 @@ public class VendingMachineCLI
         Logger.log(transaction + currency.format(transactionAmount) + " " + "REMAINING IN MACHINE: "+ currency.format(currentMoney.getCurrentMoney()));
     }
 
-    // Required for test
-    public double testShowCurrentMoney()
-    {
-        return currentMoney.getCurrentMoney();
-    }
-
-    public static void main(String[] args) throws FileNotFoundException
-    {
-        Menu menu = new Menu(System.in, System.out);
-        VendingMachineCLI cli = new VendingMachineCLI(menu);
-        cli.run();
-    }
 }

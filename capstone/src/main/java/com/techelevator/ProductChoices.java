@@ -15,25 +15,23 @@ public class ProductChoices
 {
 
     //LinkedHashMap saves the order, HashMap does not.
-    public Map<String, Item> productChoices = new LinkedHashMap<>();  //Should or could this be made private?
+    private Map<String, Item> productChoices = new LinkedHashMap<>();
 
     public static int DEFAULT_STARTING_INVENTORY = 5;
 
     //region CONSTRUCTOR
-    public ProductChoices() throws FileNotFoundException
+    public ProductChoices(File file) throws FileNotFoundException
     {
-        populateItemMap();
+        populateItemMap(file);
     }
     //endregion
 
     //GETTER
     public Map<String, Item> getProductChoices() {return productChoices;}
 
-    public void populateItemMap() throws FileNotFoundException
+    private void populateItemMap(File file) throws FileNotFoundException
     {
-        File inventory = new File(System.getProperty("user.dir")+"/capstone/vendingmachine.csv");
-        //fix for test TO-DO THIS IS HACKY AS HECK
-        //File inventory = new File(System.getProperty("user.dir")+"/vendingmachine.csv");
+        File inventory = file;
         try(Scanner fileScanner = new Scanner(inventory))
         {
             while(fileScanner.hasNextLine())
