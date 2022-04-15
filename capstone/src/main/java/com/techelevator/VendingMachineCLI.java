@@ -171,7 +171,6 @@ public class VendingMachineCLI
                 processTransaction("FEED MONEY: ", true, 2);
                 break;
             case FEED_MONEY_FIVE_DOLLAR:
-                System.out.println("fed 5");
                 processTransaction("FEED MONEY: ", true, 5);
                 break;
             case FEED_MONEY_TEN_DOLLAR:
