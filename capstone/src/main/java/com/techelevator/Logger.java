@@ -53,7 +53,7 @@ public class Logger
     {
         DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("d-MMM-uuuu HH-mma");
         String timeStamp = LocalDateTime.now().format(dateTimeFormat);
-        File salesReport = new File(System.getProperty("user.dir")+"/capstone/"+ timeStamp +"_salesreport.txt");
+        File salesReport = new File(tempDIR+"/"+ timeStamp +"_salesreport.txt");
         try
         {
             if(salesReport.createNewFile());
