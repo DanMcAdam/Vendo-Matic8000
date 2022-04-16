@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -19,9 +20,9 @@ public class ProductChoicesTest
     public void testPopulateItemMap()
     {
         Map<String, Item> testChoices = new LinkedHashMap<>();
-        Chips_Item chips = new Chips_Item("A1", "Lays", 3.05);
-        Candy_Item candy = new Candy_Item("B2", "Snickers", 1.45);
-        Drink_Item drink = new Drink_Item("C3", "Pepsi", 2.75);
+        Chips_Item chips = new Chips_Item("A1", "Lays", BigDecimal.valueOf(3.05));
+        Candy_Item candy = new Candy_Item("B2", "Snickers", BigDecimal.valueOf(1.45));
+        Drink_Item drink = new Drink_Item("C3", "Pepsi", BigDecimal.valueOf(2.75));
         testChoices.put("A1", chips);
         testChoices.put("B2", candy);
         testChoices.put("C3", drink);

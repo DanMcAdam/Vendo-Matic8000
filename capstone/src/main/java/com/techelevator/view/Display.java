@@ -6,4 +6,9 @@ public class Display
     {
         System.out.println(message);
     }
+
+    public void sendToDisplayOnSameLine (String message)
+    {
+        System.out.print(message);
+    }
 }

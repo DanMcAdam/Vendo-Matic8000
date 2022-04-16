@@ -5,6 +5,7 @@ import com.techelevator.view.Display;
 import com.techelevator.view.Menu;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -63,7 +64,6 @@ public class VendingMachineCLI
 
     public VendingMachineCLI(Menu menu) throws FileNotFoundException
     {
-        jetbrains://idea/navigate/reference?project=module-1-capstone&path=com/techelevator/placeholder.txt
         this.menu = menu;
         productChoices = new ProductChoices(new File(System.getProperty("user.dir")+"/capstone/vendingmachine.csv"));
         currentMoney = new CurrentMoney();
@@ -118,13 +118,14 @@ public class VendingMachineCLI
     {
         for (String f : productChoices.getProductChoices().keySet())
         {
-            System.out.print(" " + productChoices.getProductChoices().get(f).getSlot() + " |");
-            System.out.print(" " + productChoices.getProductChoices().get(f).getName() + " |");
-            System.out.print(" " + currency.format(productChoices.getProductChoices().get(f).getPrice()) + " | ");
+            Item currentIterationProduct = productChoices.getProductChoices().get(f);
+            display.sendToDisplayOnSameLine(" " + currentIterationProduct.getSlot() + " |");
+            display.sendToDisplayOnSameLine(" " + currentIterationProduct.getName() + " |");
+            display.sendToDisplayOnSameLine(" " + currency.format(currentIterationProduct.getPrice()) + " | ");
 
-            if (productChoices.getProductChoices().get(f).getInventory() != 0)
+            if (currentIterationProduct.getInventory() != 0)
             {
-                display.sendToDisplay(String.valueOf(productChoices.getProductChoices().get(f).getInventory()));
+                display.sendToDisplay(String.valueOf(currentIterationProduct.getInventory()));
             }
             else
             {
@@ -165,17 +166,16 @@ public class VendingMachineCLI
         // Takes incoming string, chosen by user from menu from array, to add money into machine in whole bill amounts
         switch (feedChoice) {
             case FEED_MONEY_ONE_DOLLAR:
-                processTransaction("FEED MONEY: ", true, 1);
+                processTransaction("FEED MONEY: ", true, BigDecimal.valueOf(1) );
                 break;
             case FEED_MONEY_TWO_DOLLAR:
-                processTransaction("FEED MONEY: ", true, 2);
+                processTransaction("FEED MONEY: ", true, BigDecimal.valueOf(2));
                 break;
             case FEED_MONEY_FIVE_DOLLAR:
-                System.out.println("fed 5");
-                processTransaction("FEED MONEY: ", true, 5);
+                processTransaction("FEED MONEY: ", true, BigDecimal.valueOf(5));
                 break;
             case FEED_MONEY_TEN_DOLLAR:
-                processTransaction("FEED MONEY: ", true, 10);
+                processTransaction("FEED MONEY: ", true, BigDecimal.valueOf(10));
                 break;
         }
     }
@@ -185,9 +185,9 @@ public class VendingMachineCLI
     {
         if (chosenItem != null)
         {
-            if(currentMoney.getCurrentMoney()>=chosenItem.getPrice())
+            if(currentMoney.isBalanceIsEnoughForPurchase(chosenItem.getPrice()))
             {
-                if(chosenItem.getInventory()>0)
+                if(chosenItem.isInStock())
                 {
                     processTransaction("DISPENSED: "+chosenItem.getName() + " " + chosenItem.getSlot() + " ", false, chosenItem.getPrice());
                     display.sendToDisplay("Dispensed " + chosenItem.getName() + ", for " + currency.format(chosenItem.getPrice()) + "!\nYou have " + currency.format(currentMoney.getCurrentMoney()) + " remaining on your balance\n");
@@ -200,7 +200,7 @@ public class VendingMachineCLI
         purchaseItems();
     }
 
-    private void processTransaction (String transaction, boolean isDeposit, double transactionAmount)
+    private void processTransaction (String transaction, boolean isDeposit, BigDecimal transactionAmount)
     {
         if (isDeposit)
         {

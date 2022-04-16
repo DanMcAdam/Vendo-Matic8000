@@ -2,15 +2,17 @@ package com.techelevator.items;
 
 import com.techelevator.ProductChoices;
 
+import java.math.BigDecimal;
+
 public class Candy_Item implements Item
 {
     private String name = "";
     private String slot = "";
-    private double price = 0.00;
+    private BigDecimal price;
     private int inventory = 0;
 
     // Constructor
-    public Candy_Item(String slot, String name, double price)
+    public Candy_Item(String slot, String name, BigDecimal price)
     {
         this.name = name;
         this.slot = slot;
@@ -22,7 +24,7 @@ public class Candy_Item implements Item
     @Override
     public String getName() {return name;}
     @Override
-    public double getPrice() {return price;}
+    public BigDecimal getPrice() {return price;}
     @Override
     public String getSlot() {return slot;}
     @Override
@@ -45,7 +47,7 @@ public class Candy_Item implements Item
 
     public void setSlot(String slot) {this.slot = slot;}
 
-    public void setPrice(double price) {this.price = price;}
+    public void setPrice(BigDecimal price) {this.price = price;}
 
     public void setInventory(int inventory) {this.inventory = inventory;}
     //endregion

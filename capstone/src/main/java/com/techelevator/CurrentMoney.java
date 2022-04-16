@@ -1,58 +1,64 @@
 package com.techelevator;
 
+import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CurrentMoney
 {
-    private double currentMoney = 0.00;
-    private static final double[] COIN_VALUES = {25, 10, 5};
+    private BigDecimal currentMoney = new BigDecimal(0.0);
+    private static final BigDecimal[] COIN_VALUES = {new BigDecimal(".25"), new BigDecimal(".10"), new BigDecimal(".05")};
 
     //region GETTER
-    public double getCurrentMoney() {return currentMoney;}
+    public BigDecimal getCurrentMoney() {return currentMoney;}
     //endregion
 
-    public void addMoney(double addAmount)
+    public void addMoney(BigDecimal addAmount)
     {
-        this.currentMoney += Math.abs(addAmount);
+        currentMoney = currentMoney.add(addAmount.abs());
     }
 
-    public void subtractMoney (double subtractAmount)
+    public void subtractMoney (BigDecimal subtractAmount)
     {
-        if (subtractAmount <= currentMoney)
+        if (currentMoney.compareTo(subtractAmount) >= 0)
         {
-            currentMoney-=Math.abs(subtractAmount);
+            currentMoney = currentMoney.subtract(subtractAmount.abs());
         }
     }
 
-    public static Map calculateChange(double currentMoney)
+    public boolean isBalanceIsEnoughForPurchase(BigDecimal itemCost)
+    {
+        return currentMoney.compareTo(itemCost) >= 0;
+    }
+
+    public static Map calculateChange(BigDecimal currentMoney)
     {
         Map<String, Integer> change = new HashMap();
         change.put("Nickels", 0);
         change.put("Dimes", 0);
         change.put("Quarters", 0);
 
-        double changeCounterDummy = currentMoney;
-        changeCounterDummy *= 100;  //convert to cents.
+        BigDecimal changeCounterDummy = currentMoney;
 
-        while ((int) changeCounterDummy > 0) {
-            if (COIN_VALUES[0] <= (int) changeCounterDummy)
+        while (changeCounterDummy.compareTo(new BigDecimal(0)) > 0) {
+            if (COIN_VALUES[0].compareTo(changeCounterDummy) < 1)
             {
                 int amount = change.get("Quarters");
                 change.put("Quarters", amount + 1);
-                changeCounterDummy -= COIN_VALUES[0];
+                changeCounterDummy = changeCounterDummy.subtract(COIN_VALUES[0]);
             }
-            else if (COIN_VALUES[1] <= (int) changeCounterDummy)
+            else if (COIN_VALUES[1].compareTo(changeCounterDummy) <= 0)
             {
                 int amount = change.get("Dimes");
                 change.put("Dimes", amount + 1);
-                changeCounterDummy -= COIN_VALUES[1];
+                changeCounterDummy = changeCounterDummy.subtract(COIN_VALUES[1]);
             }
-            else if (COIN_VALUES[2] <= (int) changeCounterDummy)
+            else if (COIN_VALUES[2].compareTo(changeCounterDummy) <= 0)
             {
                 int amount = change.get("Nickels");
                 change.put("Nickels", amount + 1);
-                changeCounterDummy -= COIN_VALUES[2];
+                changeCounterDummy = changeCounterDummy.subtract(COIN_VALUES[2]);
             }
             else
             {

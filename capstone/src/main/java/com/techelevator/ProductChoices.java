@@ -2,6 +2,7 @@ package com.techelevator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,19 +46,19 @@ public class ProductChoices
                 switch (slot)
                 {
                     case "Chip":
-                        Chips_Item chips = new Chips_Item(splitLine[0], splitLine[1], Double.parseDouble(splitLine[2]));
+                        Chips_Item chips = new Chips_Item(splitLine[0], splitLine[1], BigDecimal.valueOf(Double.parseDouble(splitLine[2])));
                         productChoices.put(splitLine[0], chips);
                         break;
                     case "Candy":
-                        Candy_Item candy = new Candy_Item(splitLine[0], splitLine[1], Double.parseDouble(splitLine[2]));
+                        Candy_Item candy = new Candy_Item(splitLine[0], splitLine[1], BigDecimal.valueOf(Double.parseDouble(splitLine[2])));
                         productChoices.put(splitLine[0], candy);
                         break;
                     case "Drink":
-                        Drink_Item drink = new Drink_Item(splitLine[0], splitLine[1], Double.parseDouble(splitLine[2]));
+                        Drink_Item drink = new Drink_Item(splitLine[0], splitLine[1], BigDecimal.valueOf(Double.parseDouble(splitLine[2])));
                         productChoices.put(splitLine[0], drink);
                         break;
                     case "Gum":
-                        Gum_Item gum = new Gum_Item(splitLine[0], splitLine[1], Double.parseDouble(splitLine[2]));
+                        Gum_Item gum = new Gum_Item(splitLine[0], splitLine[1], BigDecimal.valueOf(Double.parseDouble(splitLine[2])));
                         productChoices.put(splitLine[0], gum);
                         break;
                 }

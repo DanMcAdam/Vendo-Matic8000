@@ -1,5 +1,7 @@
 package com.techelevator;
 
+import com.techelevator.items.Item;
+
 import java.io.*;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
@@ -68,9 +70,10 @@ public class Logger
                 double totalSales = 0.00;
                 for (String f : productChoices.getProductChoices().keySet())
                 {
-                    String productName = productChoices.getProductChoices().get(f).getName() + "|";
-                    int productInventory = ProductChoices.DEFAULT_STARTING_INVENTORY - productChoices.getProductChoices().get(f).getInventory();
-                    totalSales+= productInventory*productChoices.getProductChoices().get(f).getPrice();
+                    Item currentIterationProduct = productChoices.getProductChoices().get(f);
+                    String productName = currentIterationProduct.getName() + "|";
+                    int productInventory = ProductChoices.DEFAULT_STARTING_INVENTORY - currentIterationProduct.getInventory();
+                    totalSales+= productInventory * currentIterationProduct.getPrice().doubleValue();
                     reportWriter.println(productName + productInventory);
                 }
                 reportWriter.println("\n####################################");
