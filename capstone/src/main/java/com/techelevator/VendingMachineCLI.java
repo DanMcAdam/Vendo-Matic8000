@@ -185,7 +185,7 @@ public class VendingMachineCLI
     {
         if (chosenItem != null)
         {
-            if(currentMoney.isBalanceIsEnoughForPurchase(chosenItem.getPrice()))
+            if(currentMoney.sufficientBalance(chosenItem.getPrice()))
             {
                 if(chosenItem.isInStock())
                 {

@@ -1,7 +1,6 @@
 package com.techelevator;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +26,7 @@ public class CurrentMoney
         }
     }
 
-    public boolean isBalanceIsEnoughForPurchase(BigDecimal itemCost)
+    public boolean sufficientBalance(BigDecimal itemCost)
     {
         return currentMoney.compareTo(itemCost) >= 0;
     }
